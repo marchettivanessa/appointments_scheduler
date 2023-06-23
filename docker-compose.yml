@@ -1,0 +1,17 @@
+---
+version: '3.9'
+
+services:
+  order-consumer:
+    network_mode: "host"
+    build:
+      context: .
+    env_file: .env
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
