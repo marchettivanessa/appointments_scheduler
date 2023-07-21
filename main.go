@@ -1,15 +1,17 @@
 package main
 
 import (
+	"appointments_scheduler/api"
 	"appointments_scheduler/config"
 	"appointments_scheduler/database"
 
+	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
 )
 
 func main() {
-c := config.MustParseConfig()
 	//Start config
+	c := config.MustParseConfig()
 
 	// Iniciating database
 	// Initializes the database connection.
@@ -19,6 +21,9 @@ c := config.MustParseConfig()
 		log.Fatal(err)
 	}
 
-	//Iniciate logs
+	// Inicie o servidor
+	e := echo.New()
+	api.RegisterHTTPRoutes(e, db)
+	e.Logger.Fatal(e.Start(":5802"))
 
 }
