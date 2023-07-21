@@ -27,5 +27,3 @@ func CreateAppointment(e echo.Context) error {
 func DeleteAppointment(c echo.Context) error {
 	return c.String(http.StatusOK, "OK")
 }
-
-// COmentario aleatorio
