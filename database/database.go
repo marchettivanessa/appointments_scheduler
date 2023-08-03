@@ -2,6 +2,7 @@ package database
 
 import (
 	"appointments_scheduler/config"
+	"appointments_scheduler/domain"
 	"errors"
 	"fmt"
 
@@ -18,6 +19,10 @@ const (
 type Database struct {
 	Config     config.DatabaseConfig
 	Connection *sqlx.DB
+}
+
+type Repository interface {
+	GetConfirmedAppointments(appointmentDate string) ([]domain.Appointment, error)
 }
 
 func newDatabaseConn(dbc config.DatabaseConfig) (*Database, error) {
@@ -85,4 +90,22 @@ func (db *Database) ResetMigration() error {
 		return fmt.Errorf("failed reseting migrations: %w", err)
 	}
 	return nil
+}
+
+func (db *Database) GetConfirmedAppointments(appointmentDate string) ([]domain.Appointment, error) {
+	queryResults := []domain.Appointment{}
+
+	query := `
+SELECT * FROM appointments WHERE status = 'CONFIRMED' AND appointment_time <= $1`
+
+	err := db.Connection.Select(&queryResults, query, appointmentDate)
+	if err != nil {
+		return nil, fmt.Errorf("failed to select all appointments in this time range: %w", err)
+	}
+
+	if len(queryResults) == 0 {
+		return nil, nil
+	}
+
+	return queryResults, nil
 }

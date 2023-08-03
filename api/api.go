@@ -13,5 +13,4 @@ func RegisterHTTPRoutes(e *echo.Echo, db *database.Database) {
 	// e.DELETE("/appointment/{id}", handler.DeleteAppointment)
 }
 
-
 // TODO descobrir como chamar a db, sendo que o e.Get não suporta parametros, ja que mexeria com a assinatura dessa funcao no echo.
