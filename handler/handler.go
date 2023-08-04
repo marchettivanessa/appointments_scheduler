@@ -5,9 +5,14 @@ import (
 	"appointments_scheduler/domain"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo"
 )
+
+type BodyMessage struct {
+	Message string `json:"message"`
+}
 
 // Get appointments handles the request and returns all appointments booked
 func GetAppointments(c echo.Context, db *database.Database) error {
@@ -23,12 +28,23 @@ func GetAppointments(c echo.Context, db *database.Database) error {
 	return c.JSON(http.StatusOK, appointments)
 }
 
-// CreateAppointment handles the request and returns , as a response, the appointment created
+// CreateAppointment handles the request and returns , as a response, if the appointment was created correctly
 func CreateAppointment(c echo.Context) error {
-	return c.String(http.StatusOK, "OK")
+var body BodyMessage
+if err := c.Bind(&body); err !=nil {
+	return echo.NewHTTPError(http.StatusBadRequest, "failed reading request body")
+}
+//aqui preciso salvar o body em um Appointment type
+	return c.String(http.StatusOK, "Appointment Created")
 }
 
 // DeleteAppointment handles the request, and returns the response, that is an appointment deleted
 func DeleteAppointment(c echo.Context) error {
+	id := c.Param("id")
+
+	idInt, err := strconv.Atoi(id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "ID inválido")
+	}
 	return c.String(http.StatusOK, "OK")
 }
