@@ -1,5 +1,10 @@
 package domain
 
+import (
+	"appointments_scheduler/database"
+	"fmt"
+)
+
 type Appointment struct {
 	ID              int
 	PatientName     Patient
@@ -21,12 +26,20 @@ type Patient struct {
 	//ID do agendamento?
 }
 
-// função com a regra de negócio  do endpoint aqui. ex: query a database etc
-func AllAppointments() []Appointment {
-	// TODO: chamar a função, mas entender pq o erro com repository
-	allAppointments := Repository.GetConfirmedAppointments
-	// tratar as apoitments recebidas
-	
-	return allAppointments()
+func GetConfirmedAppointments(appointmentDate string, db *database.Database) ([]Appointment, error) {
+	queryResults := []Appointment{}
 
+	query := `
+SELECT * FROM appointments WHERE status = 'CONFIRMED' AND appointment_time <= $1`
+
+	err := db.Connection.Select(&queryResults, query, appointmentDate)
+	if err != nil {
+		return nil, fmt.Errorf("failed to select all appointments in this time range: %w", err)
+	}
+
+	if len(queryResults) == 0 {
+		return nil, nil
+	}
+
+	return queryResults, nil
 }

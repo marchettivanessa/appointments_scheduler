@@ -8,9 +8,11 @@ import (
 )
 
 func RegisterHTTPRoutes(e *echo.Echo, db *database.Database) {
-	e.GET("/appointments", handler.GetAppointments)
+	h := func(c echo.Context) error {
+		return handler.GetAppointments(c, db)
+	}
+
+	e.GET("/appointments", h)
 	e.POST("/appointment", handler.CreateAppointment)
 	// e.DELETE("/appointment/{id}", handler.DeleteAppointment)
 }
-
-// TODO descobrir como chamar a db, sendo que o e.Get não suporta parametros, ja que mexeria com a assinatura dessa funcao no echo.

@@ -22,7 +22,7 @@ install-mockgen:
 generate-mocks:
 	mockgen -source=database/database.go -destination=database/mocks/mock_interface.go -package=mocks
 
-run-event-enricher:
+run-appointments_scheduler:
 	set -o allexport && \
 	source .env set && \
 	go run appointments_scheduler.main.go
