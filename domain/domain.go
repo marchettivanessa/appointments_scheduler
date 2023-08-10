@@ -23,7 +23,6 @@ type Patient struct {
 	Email            string
 	CauseOfTreatment string
 	PhoneNumber      string
-	//ID do agendamento?
 }
 
 func GetConfirmedAppointments(appointmentDate string, db *database.Database) ([]Appointment, error) {
@@ -42,4 +41,14 @@ SELECT * FROM appointments WHERE status = 'CONFIRMED' AND appointment_time <= $1
 	}
 
 	return queryResults, nil
+}
+
+func DeleteAppointmentById(appointmetnID int, db *database.Database) error {
+	query := `DELETE * FROM appointments WHERE id = $1`
+
+	_, err := db.Connection.Exec(query, appointmetnID)
+	if err != nil {
+		return fmt.Errorf("failed to delete the appointment %w", err)
+	}
+	return nil
 }

@@ -12,8 +12,12 @@ func RegisterHTTPRoutes(e *echo.Echo, db *database.Database) {
 		return handler.GetAppointments(c, db)
 	}
 
+	d := func(c echo.Context) error {
+		return handler.DeleteAppointment(c, db)
+	}
+
 	e.GET("/appointments", h)
 	// não há request body em requisições get. é tudo pelas url, pelo header.
 	e.POST("/appointment", handler.CreateAppointment)
-	// e.DELETE("/appointment/:id", handler.DeleteAppointment)
+	 e.DELETE("/appointment/:id", d)
 }

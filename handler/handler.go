@@ -16,9 +16,6 @@ type BodyMessage struct {
 
 // Get appointments handles the request and returns all appointments booked
 func GetAppointments(c echo.Context, db *database.Database) error {
-	// 1. Receber o request
-	// 2. Handles the request sem criar régra de negócio.
-	// 3. Chama a função com a regra de negócio
 	appointmentDate := c.QueryParam("date")
 	appointments, err := domain.GetConfirmedAppointments(appointmentDate, db)
 	if err != nil {
@@ -30,21 +27,26 @@ func GetAppointments(c echo.Context, db *database.Database) error {
 
 // CreateAppointment handles the request and returns , as a response, if the appointment was created correctly
 func CreateAppointment(c echo.Context) error {
-var body BodyMessage
-if err := c.Bind(&body); err !=nil {
-	return echo.NewHTTPError(http.StatusBadRequest, "failed reading request body")
-}
-//aqui preciso salvar o body em um Appointment type
+	var body BodyMessage
+	if err := c.Bind(&body); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "failed reading request body")
+	}
+	//aqui preciso salvar o body em um Appointment type
 	return c.String(http.StatusOK, "Appointment Created")
 }
 
 // DeleteAppointment handles the request, and returns the response, that is an appointment deleted
-func DeleteAppointment(c echo.Context) error {
+func DeleteAppointment(c echo.Context, db *database.Database) error {
 	id := c.Param("id")
 
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "ID inválido")
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid ID")
 	}
-	return c.String(http.StatusOK, "OK")
+	err = domain.DeleteAppointmentById(idInt, db)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, "failed deleting appointment from database")
+	}
+
+	return c.String(http.StatusOK, "Appointment deleted successfully")
 }
