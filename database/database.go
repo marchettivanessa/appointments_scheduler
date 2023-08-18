@@ -87,4 +87,3 @@ func (db *Database) ResetMigration() error {
 	return nil
 }
 
-// criar uma função que faça qualquer query e retorne o resultado. tem que ser genérica

@@ -8,11 +8,19 @@ import (
 )
 
 func RegisterHTTPRoutes(e *echo.Echo, db *database.Database) {
-	h := func(c echo.Context) error {
+	getHandler := func(c echo.Context) error {
 		return handler.GetAppointments(c, db)
 	}
 
-	e.GET("/appointments", h)
-	e.POST("/appointment", handler.CreateAppointment)
-	// e.DELETE("/appointment/:id", handler.DeleteAppointment)
+	postHandler := func(c echo.Context) error {
+		return handler.CreateAppointment(c, db)
+	}
+
+	deleteHandler := func(c echo.Context) error {
+		return handler.DeleteAppointment(c, db)
+	}
+
+	e.GET("/appointments", getHandler)
+	e.POST("/appointments", postHandler)
+	e.DELETE("/appointments/:id", deleteHandler)
 }
