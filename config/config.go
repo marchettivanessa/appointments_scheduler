@@ -43,14 +43,14 @@ func MustParseConfig() Config {
 			Username:       MustGetEnv("DATABASE_USERNAME"),
 			MigrationPath:  MustGetEnv("DATABASE_MIGRATION_PATH"),
 			Port:           MustParseInt("DATABASE_PORT"),
-			ConnectTimeout: MustParseInt("DATABASE_CONNECTION_TIMEOUT"),
+			ConnectTimeout: MustParseInt("DATABASE_CONNECT_TIMEOUT"),
 			Schema:         MustGetEnv("DATABASE_SCHEMA"),
 		},
 		Log: LogConfig{
 			AppName:            MustGetEnv("APP_NAME"),
 			Level:              MustGetEnv("LOG_LEVEL"),
-			EnableSyslog:       MustParseBool(MustGetEnv("LOG_ENABLE_SYSLOG")),
-			EnableReportCaller: MustParseBool(MustGetEnv("LOG_ENABLE_REPORT_CALLER")),
+			EnableSyslog:       MustParseBool(MustGetEnv("ENABLE_SYSLOG")),
+			EnableReportCaller: MustParseBool(MustGetEnv("ENABLE_REPORT_CALLER")),
 		},
 	}
 }
