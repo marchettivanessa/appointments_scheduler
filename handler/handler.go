@@ -3,6 +3,7 @@ package handler
 import (
 	"appointments_scheduler/database"
 	"appointments_scheduler/domain"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -26,13 +27,17 @@ func GetAppointments(c echo.Context, db *database.Database) error {
 }
 
 // CreateAppointment handles the request and returns , as a response, if the appointment was created correctly
-func CreateAppointment(c echo.Context) error {
-	var body BodyMessage
-	if err := c.Bind(&body); err != nil {
+func CreateAppointment(c echo.Context, db *database.Database) error {
+	var body domain.Appointment
+	if err := json.NewDecoder(c.Request().Body).Decode(&body); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "failed reading request body")
 	}
-	//aqui preciso salvar o body em um Appointment type
-	return c.String(http.StatusOK, "Appointment Created")
+
+	_, err := domain.ValidateAppointment(body, db)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, body)
 }
 
 // DeleteAppointment handles the request, and returns the response, that is an appointment deleted

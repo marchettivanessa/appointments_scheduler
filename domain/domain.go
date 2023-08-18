@@ -2,15 +2,15 @@ package domain
 
 import (
 	"appointments_scheduler/database"
+	"errors"
 	"fmt"
 )
 
 type Appointment struct {
 	ID              int
-	PatientName     Patient
+	PatientName     string
 	AppointmentTime string
 	CreatedAt       string
-	ContactOption   Patient
 	Status          string
 	PatientID       int
 }
@@ -51,4 +51,37 @@ func DeleteAppointmentById(appointmetnID int, db *database.Database) error {
 		return fmt.Errorf("failed to delete the appointment %w", err)
 	}
 	return nil
+}
+
+func ValidateAppointment(appointment Appointment, db *database.Database) (*Appointment, error) {
+	patientName := appointment.PatientName
+	if patientName == "" {
+		return nil, errors.New("not possible to save an appointment without the patient name")
+	}
+
+	appointmentTime := appointment.AppointmentTime
+	if appointmentTime == "" {
+		return nil, errors.New("not possible to save an appointment without the appointment time")
+	}
+
+	createdAt := appointment.CreatedAt
+	if createdAt == "" {
+		return nil, errors.New("not possible to save an appointment without the created at")
+	}
+
+	status := appointment.Status
+	patientID := appointment.PatientID
+
+	query := `
+	INSERT INTO scheduler.appointments (patient_name, appointment_time, created_at, status, patient_id) VALUES ($1, $2< $3, $4, $5)
+	`
+
+	row := db.Connection.QueryRow(query, patientName, appointmentTime, createdAt, status, patientID)
+
+	var insertedAppointment Appointment
+	if err := row.Scan(&insertedAppointment.PatientName, &insertedAppointment.AppointmentTime, &insertedAppointment.CreatedAt, &insertedAppointment.Status, &insertedAppointment.PatientID); err != nil {
+		return nil, errors.New("error inserting appointment into database")
+	}
+
+	return &insertedAppointment, nil
 }
