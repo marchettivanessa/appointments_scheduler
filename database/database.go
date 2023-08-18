@@ -34,7 +34,7 @@ func newDatabaseConn(dbc config.DatabaseConfig) (*Database, error) {
 }
 
 func buildConnectionString(dbc config.DatabaseConfig) string {
-	return fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s connect_timeout=%d search_path=public,%s sslmode=disable",
+	return fmt.Sprintf("host=%s port=%d username=%s password=%s dbname=%s connect_timeout=%d search_path=public,%s sslmode=disable",
 		dbc.Host,
 		dbc.Port,
 		dbc.Username,
