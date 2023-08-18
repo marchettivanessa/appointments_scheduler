@@ -21,6 +21,6 @@ func RegisterHTTPRoutes(e *echo.Echo, db *database.Database) {
 	}
 
 	e.GET("/appointments", getHandler)
-	e.POST("/appointment", postHandler)
-	e.DELETE("/appointment/:id", deleteHandler)
+	e.POST("/appointments", postHandler)
+	e.DELETE("/appointments/:id", deleteHandler)
 }
