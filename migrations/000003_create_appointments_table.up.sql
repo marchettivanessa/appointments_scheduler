@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS scheduler.appointments(
     created_at TIMESTAMPTZ NOT NULL,
     status BOOL,
     patient_id INT,
-    FOREIGN KEY (patient_id) REFERENCES Patients(patient_id)
+    FOREIGN KEY (patient_id) REFERENCES Patients(id)
 );

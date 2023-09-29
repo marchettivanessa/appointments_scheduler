@@ -4,6 +4,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -32,7 +33,13 @@ type LogConfig struct {
 	EnableReportCaller bool
 }
 
+// TODO after doing some experiments, remove this unnused line
+// func MustParseConfig(envPath, env string) Config {
 func MustParseConfig() Config {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.WithError(err).Warn("failed to load .env file")
+	}
 	return Config{
 		Env:     MustGetEnv("ENV"),
 		AppPort: MustGetEnv("APP_PORT"),
@@ -78,3 +85,13 @@ func MustParseInt(key string) int {
 	}
 	return v
 }
+
+// TODO after doing some experiments, remove this unnused code
+// func GetEnvOrDefault(key, def string) string {
+// 	v := os.Getenv(key)
+// 	if v == "" {
+// 		return def
+// 	}
+
+// 	return v
+// }

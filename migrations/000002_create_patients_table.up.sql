@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS scheduler.patients(
     address VARCHAR,
     email VARCHAR NOT NULL,
     cause_of_treatment TEXT NOT NULL,
-    phone_number STRING NOT NULL,
+    phone_number VARCHAR NOT NULL
 );

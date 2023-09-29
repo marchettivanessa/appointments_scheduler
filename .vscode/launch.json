@@ -1,0 +1,70 @@
+
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "go.useLanguageServer": true,
+    "configurations": [
+      
+    {
+      "name": "Launch Package - Debug",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/main.go",
+      "args": [
+            "-tags dynamic"
+        ],
+      // "env": {
+      //   "PKG_CONFIG_PATH": "/opt/homebrew/Cellar/openssl@3/3.1.0/lib/pkgconfig"
+      // }
+    },
+      {
+        "name": "Launch",
+        "type": "go",
+        "request": "launch",
+        "mode": "auto",
+        "program": "${fileDirname}/main.go",
+        "env": {},
+        "args": []
+      },
+      // {
+      //   "name": "Launch Package - Debug",
+      //   "type": "go",
+      //   "request": "launch",
+      //   "mode": "debug",
+      //   "program": "${workspaceFolder}",
+      //   "args": [
+      //     "-test.run",
+      //     "MyTestFunction",
+      //     "-tags dynamic"
+      //   ],
+      //   "envFile": "${workspaceFolder}/.env"
+      // },
+      {
+        "name": "Launch test function",
+        "type": "go",
+        "request": "launch",
+        "mode": "test",
+        "program": "${workspaceFolder}",
+        "args": [
+            "-test.run",
+            "MyTestFunction",
+            "-tags dynamic"
+        ],
+        "envFile": "${workspaceFolder}/.env"
+      },
+      {
+        "name": "Launch test package",
+        "type": "go",
+        "request": "launch",
+        "mode": "test",
+        "program": "${workspaceFolder}",
+        "envFile": "${workspaceFolder}/.env",
+        "args": [
+          "-tags dynamic"
+      ],
+      }
+    ]
+  }
