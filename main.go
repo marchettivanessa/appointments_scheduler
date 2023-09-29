@@ -12,8 +12,10 @@ import (
 
 func main() {
 	//Start config
-	envPath := config.GetEnvOrDefault("ENV_FILE_PATH", ".env")
-	c := config.MustParseConfig(envPath, "development")
+	// TODO after doing some experiments, remove these unnused lines
+	// envPath := config.GetEnvOrDefault("ENV_FILE_PATH", ".env")
+	// c := config.MustParseConfig(envPath, "development")
+	c := config.MustParseConfig()
 	// Initializes logging.
 	log.Info("setting up logging")
 	logging.InitLogging(c.Log)

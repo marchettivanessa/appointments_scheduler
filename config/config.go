@@ -33,7 +33,9 @@ type LogConfig struct {
 	EnableReportCaller bool
 }
 
-func MustParseConfig(envPath, env string) Config {
+// TODO after doing some experiments, remove this unnused line
+// func MustParseConfig(envPath, env string) Config {
+func MustParseConfig() Config {
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.WithError(err).Warn("failed to load .env file")
@@ -84,11 +86,12 @@ func MustParseInt(key string) int {
 	return v
 }
 
-func GetEnvOrDefault(key, def string) string {
-	v := os.Getenv(key)
-	if v == "" {
-		return def
-	}
+// TODO after doing some experiments, remove this unnused code
+// func GetEnvOrDefault(key, def string) string {
+// 	v := os.Getenv(key)
+// 	if v == "" {
+// 		return def
+// 	}
 
-	return v
-}
+// 	return v
+// }
