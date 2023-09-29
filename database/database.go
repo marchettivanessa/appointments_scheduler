@@ -46,6 +46,7 @@ func buildConnectionString(dbc config.DatabaseConfig) string {
 }
 
 func (db *Database) Migrate() error {
+	
 	driver, err := postgres.WithInstance(db.Connection.DB, &postgres.Config{})
 	if err != nil {
 		return fmt.Errorf("failed to create postgres drive: %w", err)
@@ -66,7 +67,7 @@ func (db *Database) Migrate() error {
 	return nil
 }
 
-func NewDabataseWithMigrations(c config.DatabaseConfig) (*Database, error) {
+func NewDatabaseWithMigrations(c config.DatabaseConfig) (*Database, error) {
 	database, err := newDatabaseConn(c)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create the database connection: %w", err)

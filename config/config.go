@@ -4,6 +4,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -33,6 +34,10 @@ type LogConfig struct {
 }
 
 func MustParseConfig() Config {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.WithError(err).Warn("failed to load .env file")
+	}
 	return Config{
 		Env:     MustGetEnv("ENV"),
 		AppPort: MustGetEnv("APP_PORT"),

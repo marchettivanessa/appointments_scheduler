@@ -16,7 +16,7 @@ func main() {
 	// Iniciating database
 	// Initializes the database connection.
 	log.Info("setting up database connection and running migrations")
-	db, err := database.NewDabataseWithMigrations(c.Database)
+	db, err := database.NewDatabaseWithMigrations(c.Database)
 	if err != nil {
 		log.Fatal(err)
 	}
