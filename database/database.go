@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 
+	_ "github.com/golang-migrate/migrate/v4/source/file" // Importing this to allow reading migrations from a file.
+
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	"github.com/jmoiron/sqlx"
@@ -24,6 +26,7 @@ func newDatabaseConn(dbc config.DatabaseConfig) (*Database, error) {
 	connectionString := buildConnectionString(dbc)
 	databaseConnection, err := sqlx.Open(Postgres, connectionString)
 	if err != nil {
+		log.Errorf("failed to create the database connection: %v", err)
 		return nil, fmt.Errorf("failed to create the database connection: %w", err)
 	}
 
@@ -46,15 +49,16 @@ func buildConnectionString(dbc config.DatabaseConfig) string {
 }
 
 func (db *Database) Migrate() error {
-	
+
 	driver, err := postgres.WithInstance(db.Connection.DB, &postgres.Config{})
 	if err != nil {
 		return fmt.Errorf("failed to create postgres drive: %w", err)
 	}
 
-	migrationPath := fmt.Sprintf("file://%s", db.Config.MigrationPath)
-	migration, err := migrate.NewWithDatabaseInstance(migrationPath, Postgres, driver)
+	migrationFullPath := fmt.Sprintf("file://%s", db.Config.MigrationPath)
+	migration, err := migrate.NewWithDatabaseInstance(migrationFullPath, Postgres, driver)
 	if err != nil {
+		log.Errorf("failed initializing database migration: %v", err)
 		return fmt.Errorf("failed initializing database migration: %w", err)
 	}
 
@@ -87,4 +91,3 @@ func (db *Database) ResetMigration() error {
 	}
 	return nil
 }
-

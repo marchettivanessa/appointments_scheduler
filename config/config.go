@@ -33,7 +33,7 @@ type LogConfig struct {
 	EnableReportCaller bool
 }
 
-func MustParseConfig() Config {
+func MustParseConfig(envPath, env string) Config {
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.WithError(err).Warn("failed to load .env file")
@@ -81,5 +81,14 @@ func MustParseInt(key string) int {
 	if err != nil {
 		log.WithError(err).Fatal("no valid value assigned to env variable", key)
 	}
+	return v
+}
+
+func GetEnvOrDefault(key, def string) string {
+	v := os.Getenv(key)
+	if v == "" {
+		return def
+	}
+
 	return v
 }
