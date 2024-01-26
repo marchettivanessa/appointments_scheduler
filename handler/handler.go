@@ -15,10 +15,24 @@ type BodyMessage struct {
 	Message string `json:"message"`
 }
 
+type Handler struct {
+	dbMethods dbInterface
+}
+
+func NewHandler(dbMethods dbInterface) Handler{
+	return Handler{
+		dbMethods: dbMethods,
+	}
+}
+
+type dbInterface interface{
+	GetConfirmedAppointments(string, *database.Database)([]domain.Appointment, error)
+}
+
 // Get appointments handles the request and returns all appointments booked
-func GetAppointments(c echo.Context, db *database.Database) error {
+func (h Handler) GetAppointments(c echo.Context, db *database.Database) error {
 	appointmentDate := c.QueryParam("date")
-	appointments, err := domain.GetConfirmedAppointments(appointmentDate, db)
+	appointments, err := h.dbMethods.GetConfirmedAppointments(appointmentDate, db)
 	if err != nil {
 		return fmt.Errorf("failed to get appointments from database: %w", err)
 	}
@@ -55,3 +69,8 @@ func DeleteAppointment(c echo.Context, db *database.Database) error {
 
 	return c.String(http.StatusOK, "Appointment deleted successfully")
 }
+
+// NEXT STEPS
+// Testar localmente os endpoints
+// Testar os endpoints, usar mocks
+// Criar um login - procurar alguma lib que conecte com o google (autenticação e autorização já faz isso pra mim)

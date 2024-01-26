@@ -2,14 +2,17 @@ package api
 
 import (
 	"appointments_scheduler/database"
+	"appointments_scheduler/domain"
 	"appointments_scheduler/handler"
 
 	"github.com/labstack/echo"
 )
 
 func RegisterHTTPRoutes(e *echo.Echo, db *database.Database) {
+	nDomain := domain.Domain{}
+	nHandler := handler.NewHandler(nDomain)
 	getHandler := func(c echo.Context) error {
-		return handler.GetAppointments(c, db)
+		return nHandler.GetAppointments(c, db)
 	}
 
 	postHandler := func(c echo.Context) error {
