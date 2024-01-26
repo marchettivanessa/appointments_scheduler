@@ -69,8 +69,3 @@ func DeleteAppointment(c echo.Context, db *database.Database) error {
 
 	return c.String(http.StatusOK, "Appointment deleted successfully")
 }
-
-// NEXT STEPS
-// Testar localmente os endpoints
-// Testar os endpoints, usar mocks
-// Criar um login - procurar alguma lib que conecte com o google (autenticação e autorização já faz isso pra mim)
