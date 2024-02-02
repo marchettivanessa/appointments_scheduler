@@ -16,7 +16,7 @@ func RegisterHTTPRoutes(e *echo.Echo, db *database.Database) {
 	}
 
 	postHandler := func(c echo.Context) error {
-		return handler.CreateAppointment(c, db)
+		return nHandler.CreateAppointment(c, db)
 	}
 
 	deleteHandler := func(c echo.Context) error {
