@@ -25,7 +25,9 @@ type Patient struct {
 	PhoneNumber      string
 }
 
-func GetConfirmedAppointments(appointmentDate string, db *database.Database) ([]Appointment, error) {
+type Domain struct {}
+
+func (d Domain) GetConfirmedAppointments(appointmentDate string, db *database.Database) ([]Appointment, error) {
 	queryResults := []Appointment{}
 
 	query := `
