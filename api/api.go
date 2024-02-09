@@ -20,7 +20,7 @@ func RegisterHTTPRoutes(e *echo.Echo, db *database.Database) {
 	}
 
 	deleteHandler := func(c echo.Context) error {
-		return handler.DeleteAppointment(c, db)
+		return nHandler.DeleteAppointment(c, db)
 	}
 
 	e.GET("/appointments", getHandler)

@@ -28,6 +28,7 @@ func NewHandler(dbMethods dbInterface) Handler {
 type dbInterface interface {
 	GetConfirmedAppointments(string, *database.Database) ([]domain.Appointment, error)
 	ValidateAppointment(domain.Appointment, *database.Database) (*domain.Appointment, error)
+	DeleteAppointmentById(int, *database.Database) error
 }
 
 // Get appointments handles the request and returns all appointments booked
@@ -55,14 +56,14 @@ func (h Handler) CreateAppointment(c echo.Context, db *database.Database) error 
 }
 
 // DeleteAppointment handles the request, and returns the response, that is an appointment deleted
-func DeleteAppointment(c echo.Context, db *database.Database) error {
+func (h Handler) DeleteAppointment(c echo.Context, db *database.Database) error {
 	id := c.Param("id")
 
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid ID")
 	}
-	err = domain.DeleteAppointmentById(idInt, db)
+	err = h.dbMethods.DeleteAppointmentById(idInt, db)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "failed deleting appointment from database")
 	}
