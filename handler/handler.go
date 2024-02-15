@@ -19,14 +19,16 @@ type Handler struct {
 	dbMethods dbInterface
 }
 
-func NewHandler(dbMethods dbInterface) Handler{
+func NewHandler(dbMethods dbInterface) Handler {
 	return Handler{
 		dbMethods: dbMethods,
 	}
 }
 
-type dbInterface interface{
-	GetConfirmedAppointments(string, *database.Database)([]domain.Appointment, error)
+type dbInterface interface {
+	GetConfirmedAppointments(string, *database.Database) ([]domain.Appointment, error)
+	ValidateAppointment(domain.Appointment, *database.Database) (*domain.Appointment, error)
+	DeleteAppointmentById(int, *database.Database) error
 }
 
 // Get appointments handles the request and returns all appointments booked
@@ -41,13 +43,12 @@ func (h Handler) GetAppointments(c echo.Context, db *database.Database) error {
 }
 
 // CreateAppointment handles the request and returns , as a response, if the appointment was created correctly
-func CreateAppointment(c echo.Context, db *database.Database) error {
+func (h Handler) CreateAppointment(c echo.Context, db *database.Database) error {
 	var body domain.Appointment
 	if err := json.NewDecoder(c.Request().Body).Decode(&body); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "failed reading request body")
 	}
-
-	_, err := domain.ValidateAppointment(body, db)
+	_, err := h.dbMethods.ValidateAppointment(body, db)
 	if err != nil {
 		return err
 	}
@@ -55,14 +56,14 @@ func CreateAppointment(c echo.Context, db *database.Database) error {
 }
 
 // DeleteAppointment handles the request, and returns the response, that is an appointment deleted
-func DeleteAppointment(c echo.Context, db *database.Database) error {
+func (h Handler) DeleteAppointment(c echo.Context, db *database.Database) error {
 	id := c.Param("id")
 
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid ID")
 	}
-	err = domain.DeleteAppointmentById(idInt, db)
+	err = h.dbMethods.DeleteAppointmentById(idInt, db)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "failed deleting appointment from database")
 	}

@@ -16,11 +16,11 @@ func RegisterHTTPRoutes(e *echo.Echo, db *database.Database) {
 	}
 
 	postHandler := func(c echo.Context) error {
-		return handler.CreateAppointment(c, db)
+		return nHandler.CreateAppointment(c, db)
 	}
 
 	deleteHandler := func(c echo.Context) error {
-		return handler.DeleteAppointment(c, db)
+		return nHandler.DeleteAppointment(c, db)
 	}
 
 	e.GET("/appointments", getHandler)

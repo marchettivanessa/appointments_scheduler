@@ -45,7 +45,7 @@ SELECT * FROM appointments WHERE status = 'CONFIRMED' AND appointment_time <= $1
 	return queryResults, nil
 }
 
-func DeleteAppointmentById(appointmetnID int, db *database.Database) error {
+func (d Domain) DeleteAppointmentById(appointmetnID int, db *database.Database) error {
 	query := `DELETE * FROM appointments WHERE id = $1`
 
 	_, err := db.Connection.Exec(query, appointmetnID)
@@ -55,7 +55,7 @@ func DeleteAppointmentById(appointmetnID int, db *database.Database) error {
 	return nil
 }
 
-func ValidateAppointment(appointment Appointment, db *database.Database) (*Appointment, error) {
+func (d Domain) ValidateAppointment(appointment Appointment, db *database.Database) (*Appointment, error) {
 	patientName := appointment.PatientName
 	if patientName == "" {
 		return nil, errors.New("not possible to save an appointment without the patient name")
