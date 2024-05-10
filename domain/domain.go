@@ -25,6 +25,7 @@ type Patient struct {
 	PhoneNumber      string
 }
 
+
 type Domain struct {}
 
 func (d Domain) GetConfirmedAppointments(appointmentDate string, db *database.Database) ([]Appointment, error) {
